@@ -60,6 +60,7 @@ export default async () => {
   const USE_HTTP2 = process.env.USE_HTTP2;
   const HTTPS_CERT = process.env.HTTPS_CERT;
   const HTTPS_KEY = process.env.HTTPS_KEY;
+  const PAYLOAD_SIZE_LIMIT = process.env.PAYLOAD_SIZE_LIMIT || "50mb";
 
   function getPort() {
     if (process.env.PORT) {
@@ -74,6 +75,9 @@ export default async () => {
 
   // Start Express
   const app = express();
+
+  app.use(express.json({limit: PAYLOAD_SIZE_LIMIT}));
+  
   /* eslint-disable @typescript-eslint/no-explicit-any */
   let server: any = null;
 
