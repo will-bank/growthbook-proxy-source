@@ -1,4 +1,4 @@
-import express from "express";
+import express, {Request, Response} from "express";
 import * as spdy from "spdy";
 import dotenv from "dotenv";
 import { CacheEngine, Context } from "./types";
@@ -76,7 +76,12 @@ export default async () => {
   // Start Express
   const app = express();
 
-  app.use(express.json({limit: PAYLOAD_SIZE_LIMIT}));
+  app.use(express.json({
+    limit: PAYLOAD_SIZE_LIMIT,
+    verify: (req: Request, res: Response, buf) => {
+      res.locals.rawBody = buf
+    }
+  }));
   
   /* eslint-disable @typescript-eslint/no-explicit-any */
   let server: any = null;

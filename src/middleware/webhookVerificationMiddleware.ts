@@ -19,11 +19,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
   }
   const sig = req.get("x-growthbook-signature") || "";
 
-  let body = JSON.stringify(req.body);
-
   const computed = crypto
     .createHmac("sha256", connection?.signingKey || "")
-    .update(body || new Buffer(""))
+    .update(res.locals.rawBody || new Buffer(""))
     .digest("hex");
 
   if (!crypto.timingSafeEqual(Buffer.from(computed), Buffer.from(sig))) {
