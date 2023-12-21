@@ -1,0 +1,38 @@
+name: Build Publish Docker image
+run-name: Build Publish Docker image by ${{ github.actor }} ${{ github.run_number }}
+
+on:
+  workflow_dispatch:
+
+# Declare this env with your registry repository name of your image.
+env:
+  REGISTRY_REPOSITORY_NAME: growthbook-proxy-custom
+permissions:
+  id-token: write
+  contents: write
+  actions: write
+
+jobs:
+  build-publish-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ vars.AWS_ECR_ROLE }}
+          role-session-name: githubActions
+          aws-region: ${{ vars.AWS_ECR_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      # You can see more details about this action in the link below:
+      # https://github.com/will-bank/build-docker-image-action#readme
+      - name: Build and Push Docker Image
+        uses: will-bank/build-docker-image-action@v0.5.0
+        with:
+          registry-repository-name: ${{ env.REGISTRY_REPOSITORY_NAME }}
+          dockerfile-path: Dockerfile
