@@ -8,7 +8,7 @@ export const initializeLogger = (context: Context) => {
   const environment = context.environment || "production";
   const l = pinoHttp({
     autoLogging: environment === "production",
-    level: environment === "production" ? "warn" : "debug",
+    level: "debug",
     redact: {
       paths: [
         "req.headers.authorization",

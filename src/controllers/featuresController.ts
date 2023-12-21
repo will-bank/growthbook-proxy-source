@@ -31,6 +31,7 @@ const getFeatures = async (req: Request, res: Response, next: NextFunction) => {
   const features = entry?.payload;
 
   if (features === undefined) {
+    logger.debug("[feateres controller] Cache MISS");
     // expired or unset
     return (
       await readThroughCacheMiddleware({

@@ -77,7 +77,7 @@ export default async ({ proxyTarget }: { proxyTarget: string }) => {
         errorCounts[proxyTarget] = (errorCounts[proxyTarget] || 0) + 1;
         res.status(500).json({ message: "Proxy error" });
       },
-      logLevel: "silent",
+      logLevel: "debug",
     });
   }
 
